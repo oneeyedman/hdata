@@ -6,9 +6,9 @@ function getRandomNumber(max) {
   return Math.floor(Math.random() * max);
 }
 
-function getNRandomNumbers(length, max) {
+function getNRandomNumbers(total, max) {
   let result = '';
-  for (let i=0; i<4; i++) {
+  for (let i=0; i<total; i++) {
     result += getRandomNumber(max);
   }
   return result;
@@ -23,9 +23,10 @@ function getMyElement(originalArr, newArr, i) {
   }
 }
 
-function getBankAccount() {
+function getBankAccount(countryCode) {
   let result = [];
-  for (let i=0; i<5; i++) {
+  result[0] = `${countryCode}${getNRandomNumbers(2,10)}`;
+  for (let i=1; i<6; i++) {
     result[i] = getNRandomNumbers(4,10);
   }
   return result.join(' ');
@@ -74,26 +75,21 @@ class App extends React.Component {
   }
 
   render() {
-
-
-
-
     let json = `{
     "date": "${this.state.date}",
     "data": [
       `;
-
     for (let i=0; i<this.state.data.length; i++) {
       const item = this.state.data[i];
       const {first, last} = item.name;
-      const {email, login} = item;
+      const {email, login, nat} = item;
       const fullName = first + ' ' + last;
       json += `{
         "name": "${fullName}",
         "email": "${getEmail(email)}",
-        "pswd": ["${getPswd(login.password).join('\",\"')}"],
+        "pswd": ["${getPswd(login.password).join('","')}"],
         "bank": {
-          "account": "${getBankAccount()}",
+          "account": "${getBankAccount(nat)}",
           "pin": "${getNRandomNumbers(4,10)}"
         }
       },`;
